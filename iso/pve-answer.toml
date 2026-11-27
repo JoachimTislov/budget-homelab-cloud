@@ -1,0 +1,32 @@
+# ==============================================================================
+# Proxmox VE 8.x Unattended Installer Answer File
+# Used by: proxmox-auto-install-assistant to build zero-touch installer ISOs
+# Documentation: https://pve.proxmox.com/wiki/Automated_Installation
+# ==============================================================================
+
+[global]
+keyboard = "en-us"
+country = "us"
+timezone = "America/New_York"
+# Set your hashed or plain root password (plain shown for demo; replace with your secure pass or hash)
+root_password = "HomelabAdminPassword123!"
+# SSH public keys automatically placed in /root/.ssh/authorized_keys
+root_ssh_keys = [
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIExamplePublicKeyForYourSSHAccessHere user@laptop"
+]
+mailto = "admin@homelab.local"
+reboot_on_error = false
+
+[network]
+# Set to 'dhcp' for zero-touch automatic networking or 'manual' with static values
+source = "dhcp"
+# Default fallback hostname for unattended boot (can be changed later by bootstrap script)
+fqdn = "pve-node.homelab.local"
+
+[disk-setup]
+# Filesystem: ext4, xfs, or zfs (raid0, raid1, raid10)
+filesystem = "ext4"
+# Automatically targets the primary NVMe or SATA SSD
+disk_list = ["nvme0n1"]
+# If using SATA instead of NVMe on older hardware, use:
+# disk_list = ["sda"]

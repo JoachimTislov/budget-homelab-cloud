@@ -1,0 +1,34 @@
+#cloud-config
+# ==============================================================================
+# Bare-Metal Ubuntu/Debian Cloud-Init Autoinstall Configuration
+# Boots unattended, configures disk, sets up SSH, and triggers bootstrap script
+# ==============================================================================
+autoinstall:
+  version: 1
+  locale: en_US.UTF-8
+  keyboard:
+    layout: us
+  identity:
+    hostname: budget-node
+    username: admin
+    # Hashed password (default: 'ubuntu' or provide your own)
+    password: "$6$rounds=4096$homelab$qP6u.q1bO05XqQ7KzS1Fw2Jv9LzYmUv5Lp9J0.H7ZtA4B9C8D0E1F2G3H4I5J6K7L8M9N0O1P2Q3R4S5T6U7V8"
+  ssh:
+    install-server: true
+    authorized-keys:
+      - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIExamplePublicKeyForYourSSHAccessHere user@laptop"
+    allow-pw: true
+  storage:
+    layout:
+      name: direct
+  packages:
+    - curl
+    - wget
+    - git
+    - htop
+    - tmux
+    - qemu-guest-agent
+    - ca-certificates
+  late-commands:
+    # Trigger first-boot bootstrap automation
+    - curtin in-target --target=/target -- bash -c "curl -fsSL https://raw.githubusercontent.com/.../scripts/bootstrap-node.sh -o /usr/local/bin/bootstrap-node.sh && chmod +x /usr/local/bin/bootstrap-node.sh"
